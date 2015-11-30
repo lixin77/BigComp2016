@@ -55,9 +55,14 @@ paras = []
 for K in xrange(Topic_beg, Topic_end + 1):
     para = dict()
     para['K'] = K
-    para['TrainDocs'] = TrainDocs 
-    para['TrainRatings'] = TrainRatings
-    para['TestDocs'] = TestDocs
-    para['TestRatings'] = TestRatings
+    para['TrainDocs'] = [doc for doc in TrainDocs]
+    para['TrainRatings'] = [rating for rating in TrainRatings]
+    para['TestDocs'] = [doc for doc in TestDocs]
+    para['TestRatings'] = [rating for rating in TestRatings]
     paras.append(para)
+    para = None
+TrainDocs = None
+TestDocs = None
+TrainRatings = None
+TestRatings = None
 map(RunCase, paras)

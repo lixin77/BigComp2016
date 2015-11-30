@@ -225,7 +225,6 @@ class NBModel:
                 # number of docs in the class eid
                 N = len(self.EmotionDoc[eid])
                 sim = 0.0
-                print self.EmotionDoc[eid]
                 for docid in self.EmotionDoc[eid]:
                     pzd = Normalize(list=self.DocTopicMat[docid])
                     sim += (CaculateCosine(lista=pzw, listb=pzd) * self.importance[docid])

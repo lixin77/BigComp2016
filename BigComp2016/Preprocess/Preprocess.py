@@ -4,6 +4,8 @@ __author__ = 'lixin77'
 import string
 #from gensim import corpora
 from SaveUtil.SaveUtil import *
+import os
+from nltk.util import ngrams
 
 
 def PreprocessText(text, StopWordList):
@@ -94,3 +96,13 @@ def Word2Id(WordList, Dictionary):
     for word in WordList:
         IDList.append(Dictionary[word])
     return IDList
+
+
+def ExtractNGram(sentence, N=2):
+    """
+
+    :param sentence: sentence to be processed, stop words and punctuations have been filtered
+    :param N: number of grams
+    """
+
+    pass
