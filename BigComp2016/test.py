@@ -45,7 +45,7 @@ def RunCase(para):
     TrainRatings = para['TrainRatings']
     TestDocs = para['TestDocs']
     TestRatings = para['TestRatings']
-    model = NBModel(topics=K, alpha=50.0/ float(K), beta=0.1, caseId=K)
+    model = NBModel(topics=K, alpha=0.05, beta=0.01, caseId=K)
     model.run(TrainingDocs=TrainDocs, TrainingRatings=TrainRatings, TestingDocs=TestDocs)
     model.Infer(TestingDocs=TestDocs, TestRatings=TestRatings)
 
