@@ -104,5 +104,6 @@ def ExtractNGram(sentence, N=2):
     :param sentence: sentence to be processed, stop words and punctuations have been filtered
     :param N: number of grams
     """
+    _word_list = sentence.split(' ')
 
     pass
