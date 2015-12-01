@@ -105,5 +105,8 @@ def ExtractNGram(sentence, N=2):
     :param N: number of grams
     """
     _word_list = sentence.split(' ')
-
-    pass
+    NGrams = ngrams(_word_list, N)
+    _gram_list = []
+    for item in NGrams:
+        _gram_list.append(' '.join(item))
+    return _gram_list
