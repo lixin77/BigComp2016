@@ -34,15 +34,20 @@ class NBModel:
     EmotionDoc = []                # EmotionDoc[i] contains all the doc id in the emotion class i, length of
     # EmotionDoc[i] represents the number of documents in the class i
     caseId = int
+    dataset = ''
 
 
-    def __init__(self, topics, alpha, beta, caseId, isTrainedModel=False):
+    def __init__(self, topics, alpha, beta, caseId, dataset, isTrainedModel=False):
         print "Begin to instantiate the lda-(naive bayes) model..."
         self.K = topics
         self.alpha = alpha
         self.beta = beta
         self.gamma = beta
-        self.E = 6
+        if dataset == 'semeval':
+            self.E = 6
+        if dataset == 'sina':
+            self.E = 8
+        self.dataset = dataset
         self.caseId = caseId
         self.Prob = Initial(self.E, 0.0)
         self.EmotionTopic = InitialMat(self.E, self.K, 0)
@@ -107,6 +112,12 @@ class NBModel:
             lines.append('%sth document: ' % (i+1) + toString(self.DocTopicMat[i]))
         fp.writelines(lines)
         """
+
+    def loadModel(self):
+        """
+        load trained model from the disk
+        """
+        pass
 
     def initModel(self, TrainingDocs, TrainingRatings, TestingDocs):
         """
@@ -319,29 +330,29 @@ class NBModel:
         return prob
 
     def initEmotionDict(self):
-        """
-        self.EmotionLabelDict[0] = "感动"
-        self.EmotionIdDic["感动"] = 0
-        self.EmotionLabelDict[1] = "同情"
-        self.EmotionIdDic["同情"] = 1
-        self.EmotionLabelDict[2] = "无聊"
-        self.EmotionIdDic["无聊"] = 2
-        self.EmotionLabelDict[3] = "愤怒"
-        self.EmotionIdDic["愤怒"] = 3
-        self.EmotionLabelDict[4] = "搞笑"
-        self.EmotionIdDic["搞笑"] = 4
-        self.EmotionLabelDict[5] = "难过"
-        self.EmotionIdDic["难过"] = 5
-        self.EmotionLabelDict[6] = "新奇"
-        self.EmotionIdDic["新奇"] = 6
-        self.EmotionLabelDict[7] = "温馨"
-        self.EmotionIdDic["温馨"] = 7
-        """
+        if self.dataset == 'sina':
+            self.EmotionLabelDict[0] = "感动"
+            self.EmotionIdDic["感动"] = 0
+            self.EmotionLabelDict[1] = "同情"
+            self.EmotionIdDic["同情"] = 1
+            self.EmotionLabelDict[2] = "无聊"
+            self.EmotionIdDic["无聊"] = 2
+            self.EmotionLabelDict[3] = "愤怒"
+            self.EmotionIdDic["愤怒"] = 3
+            self.EmotionLabelDict[4] = "搞笑"
+            self.EmotionIdDic["搞笑"] = 4
+            self.EmotionLabelDict[5] = "难过"
+            self.EmotionIdDic["难过"] = 5
+            self.EmotionLabelDict[6] = "新奇"
+            self.EmotionIdDic["新奇"] = 6
+            self.EmotionLabelDict[7] = "温馨"
+            self.EmotionIdDic["温馨"] = 7
 
-        for i in xrange(6):
-            label = ("E" + str(i))
-            self.EmotionLabelDict[i] = label
-            self.EmotionIdDic[label] = i
+        if self.dataset == 'semeval':
+            for i in xrange(6):
+                label = ("E" + str(i))
+                self.EmotionLabelDict[i] = label
+                self.EmotionIdDic[label] = i
 
 
     def ComputeTotalWordsInClass(self, eid):

@@ -25,7 +25,8 @@ TrainRatings = []
 TestDocs = []
 TestRatings = []
 isFirstLine = True
-isTrainedModel = True
+isTrainedModel = True # determine whether we use self-training model or trained model
+
 for line in fp:
     contents = line.strip('\n').strip('\r').split('\t')
     #assert len(contents) == 3
@@ -47,6 +48,7 @@ def RunCase(para):
     TrainRatings = para['TrainRatings']
     TestDocs = para['TestDocs']
     TestRatings = para['TestRatings']
+    IsTrainedModel = para['IsTrainedModel']
     model = NBModel(topics=K, alpha=0.05, beta=0.01, caseId=K)
     model.run(TrainingDocs=TrainDocs, TrainingRatings=TrainRatings, TestingDocs=TestDocs)
     model.Infer(TestingDocs=TestDocs, TestRatings=TestRatings)
@@ -61,6 +63,7 @@ for K in xrange(Topic_beg, Topic_end + 1):
     para['TrainRatings'] = [rating for rating in TrainRatings]
     para['TestDocs'] = [doc for doc in TestDocs]
     para['TestRatings'] = [rating for rating in TestRatings]
+    para['IsTrainedModel'] = True
     paras.append(para)
     para = None
 TrainDocs = None
