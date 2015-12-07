@@ -17,7 +17,7 @@ def PreprocessText(text, StopWordList):
     WordList = DelPunctuation(text)
     #StemmeredWordList = Stemmer(WordList)
     FilteredWordList = FilterStopWords(StemmeredWordList, StopWordList)
-    return WordList
+    return FilteredWordList
 
 
 def DelPunctuation(text):

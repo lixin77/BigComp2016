@@ -242,12 +242,17 @@ class NBModel:
             posterior += math.log(self.ClassProb[eid], 2)
             for wid in WordList:
                 pzw = [row[wid] for row in self.TopicWordMat]
-                pzw = Normalize(list=pzw, smoother=self.alpha)
+                if not self.isTrainedModel:
+                    # self training model needs normalization
+                    pzw = Normalize(list=pzw, smoother=self.alpha)
                 # number of docs in the class eid
                 N = len(self.EmotionDoc[eid])
                 sim = 0.0
                 for docid in self.EmotionDoc[eid]:
-                    pzd = Normalize(list=self.DocTopicMat[docid])
+                    if self.isTrainedModel:
+                        pzd = self.DocTopicMat[docid]
+                    else:
+                        pzd = Normalize(list=self.DocTopicMat[docid])
                     sim += (CaculateCosine(lista=pzw, listb=pzd) * self.importance[docid])
                 sim /= N
                 # print "similarities is: %s" % sim
