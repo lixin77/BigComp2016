@@ -1,4 +1,5 @@
 __author__ = 'Administrator'
+# -*-coding:utf-8-*-
 
 def _load_pz_d(path):
     """

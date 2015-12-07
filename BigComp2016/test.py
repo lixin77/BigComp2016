@@ -16,6 +16,7 @@ path = os.getcwd() + '/semeval.txt'
 #path = os.getcwd() + '/sinanews.txt'
 #path = os.getcwd() + '/sinaLongSmall.txt'
 #path = os.getcwd() + '/sinanewsLong.txt'
+_trained_model = 1
 fp = open(path, 'r')
 train_count = 0
 test_count = 0
@@ -24,6 +25,7 @@ TrainRatings = []
 TestDocs = []
 TestRatings = []
 isFirstLine = True
+isTrainedModel = True
 for line in fp:
     contents = line.strip('\n').strip('\r').split('\t')
     #assert len(contents) == 3

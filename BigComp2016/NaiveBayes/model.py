@@ -36,7 +36,7 @@ class NBModel:
     caseId = int
 
 
-    def __init__(self, topics, alpha, beta, caseId):
+    def __init__(self, topics, alpha, beta, caseId, isTrainedModel=False):
         print "Begin to instantiate the lda-(naive bayes) model..."
         self.K = topics
         self.alpha = alpha
