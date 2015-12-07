@@ -3,23 +3,25 @@ __author__ = 'lixin77'
 
 from NaiveBayes.model import NBModel
 import os
-K = 50
-alpha = 0.05
-beta = 0.01
-#train_num = 2342
-#test_num = 2228
-train_num = 246
-test_num = 1000
+
 
 #path = os.getcwd() + '/sinaTitle.txt'
 path = os.getcwd() + '/semeval.txt'
 #path = os.getcwd() + '/sinanews.txt'
 #path = os.getcwd() + '/sinaLongSmall.txt'
 #path = os.getcwd() + '/sinanewsLong.txt'
-_trained_model = 1
+
+dataset = 'semeval'
+
+if dataset == 'semeval':
+    train_num = 246
+    test_num = 1000
+
+if dataset == 'sina':
+    train_num = 2342
+    test_num = 2228
+
 fp = open(path, 'r')
-train_count = 0
-test_count = 0
 TrainDocs = []
 TrainRatings = []
 TestDocs = []
@@ -27,6 +29,8 @@ TestRatings = []
 isFirstLine = True
 isTrainedModel = True # determine whether we use self-training model or trained model
 
+train_count = 0
+test_count = 0
 for line in fp:
     contents = line.strip('\n').strip('\r').split('\t')
     #assert len(contents) == 3
@@ -49,8 +53,13 @@ def RunCase(para):
     TestDocs = para['TestDocs']
     TestRatings = para['TestRatings']
     IsTrainedModel = para['IsTrainedModel']
-    model = NBModel(topics=K, alpha=0.05, beta=0.01, caseId=K)
-    model.run(TrainingDocs=TrainDocs, TrainingRatings=TrainRatings, TestingDocs=TestDocs)
+    model = NBModel(topics=K, alpha=0.05, beta=0.01, caseId=K, IsTrainedModel=IsTrainedModel)
+    if IsTrainedModel:
+        # use the trained model
+        model.loadModel(TrainingDocs=TrainDocs, TrainingRatings=TrainRatings)
+    else:
+        # use the self training model
+        model.run(TrainingDocs=TrainDocs, TrainingRatings=TrainRatings, TestingDocs=TestDocs)
     model.Infer(TestingDocs=TestDocs, TestRatings=TestRatings)
 
 Topic_beg = int(raw_input('please input start topic: '))

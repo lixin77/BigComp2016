@@ -1,6 +1,7 @@
 __author__ = 'lixin77'
 # -*-coding:utf-8-*-
 from LoadData.LoadData import *
+from LoadData.LoadModel import *
 from Preprocess.Preprocess import *
 from ListUtil.ListUtil import *
 from Sample.Sample import *
@@ -35,9 +36,10 @@ class NBModel:
     # EmotionDoc[i] represents the number of documents in the class i
     caseId = int
     dataset = ''
+    isTrainedModel = bool
 
 
-    def __init__(self, topics, alpha, beta, caseId, dataset, isTrainedModel=False):
+    def __init__(self, topics, alpha, beta, caseId, dataset, IsTrainedModel=False):
         print "Begin to instantiate the lda-(naive bayes) model..."
         self.K = topics
         self.alpha = alpha
@@ -48,6 +50,7 @@ class NBModel:
         if dataset == 'sina':
             self.E = 8
         self.dataset = dataset
+        self.isTrainedModel = isTrainedModel
         self.caseId = caseId
         self.Prob = Initial(self.E, 0.0)
         self.EmotionTopic = InitialMat(self.E, self.K, 0)
@@ -113,11 +116,18 @@ class NBModel:
         fp.writelines(lines)
         """
 
-    def loadModel(self):
+    def loadModel(self, TrainingDocs, TrainingRatings):
         """
         load trained model from the disk
         """
-        pass
+        self.D = len(TrainingDocs)
+        self.importance = Initial(size=self.D, data=0.0)
+        self.IdListSet = _load_id_list(path='%s/doc_ids.txt' % self.dataset)
+        self.Dictionary = _load_vocabulary(path='%s/voca.txt' % self.dataset)
+        self.W = len(self.Dictionary)
+        self.DocTopicMat = _load_pz_d(path='%s/k%s.pz_d' % (self.dataset, self.K))
+        self.TopicWordMat = _load_pw_z(path='%s/k%s.pw_z' % (self.dataset, self.K))
+        self.InitDocEmotion(TrainingRatings)
 
     def initModel(self, TrainingDocs, TrainingRatings, TestingDocs):
         """
