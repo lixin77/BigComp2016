@@ -60,7 +60,8 @@ def RunCase(para):
     TestDocs = para['TestDocs']
     TestRatings = para['TestRatings']
     IsTrainedModel = para['IsTrainedModel']
-    model = NBModel(topics=K, alpha=0.05, beta=0.01, caseId=K, IsTrainedModel=IsTrainedModel)
+    dataset = para['dataset']
+    model = NBModel(topics=K, alpha=0.05, beta=0.01, caseId=K, dataset=dataset, IsTrainedModel=IsTrainedModel)
     if IsTrainedModel:
         # use the trained model
         model.loadModel(TrainingDocs=TrainDocs, TrainingRatings=TrainRatings)
@@ -79,7 +80,8 @@ for K in xrange(Topic_beg, Topic_end + 1):
     para['TrainRatings'] = [rating for rating in TrainRatings]
     para['TestDocs'] = [doc for doc in TestDocs]
     para['TestRatings'] = [rating for rating in TestRatings]
-    para['IsTrainedModel'] = True
+    para['dataset'] = dataset
+    para['IsTrainedModel'] = False
     paras.append(para)
     para = None
 TrainDocs = None
