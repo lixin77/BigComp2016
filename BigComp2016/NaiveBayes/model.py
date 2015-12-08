@@ -127,6 +127,7 @@ class NBModel:
         self.W = len(self.Dictionary)
         self.DocTopicMat = LoadModel._load_pz_d(path='%s/k%s.pz_d' % (self.dataset, self.K))
         self.TopicWordMat = LoadModel._load_pw_z(path='%s/k%s.pw_z' % (self.dataset, self.K))
+        self.DocEmotion = InitialMat(self.D, self.E, 0)
         self.InitDocEmotion(TrainingRatings)
 
     def initModel(self, TrainingDocs, TrainingRatings, TestingDocs):
