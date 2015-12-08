@@ -26,7 +26,6 @@ TrainDocs = []
 TrainRatings = []
 TestDocs = []
 TestRatings = []
-isFirstLine = True
 isTrainedModel = True # determine whether we use self-training model or trained model
 
 train_count = 0
@@ -35,13 +34,21 @@ for line in fp:
     contents = line.strip('\n').strip('\r').split('\t')
     #assert len(contents) == 3
     if train_count < train_num:
-        TrainDocs.append(contents[1])
-        TrainRatings.append(contents[0])
+        if dataset == 'semeval':
+            TrainDocs.append(contents[1])
+            TrainRatings.append(contents[0])
+        if dataset == 'sina':
+            TrainDocs.append(contents[2])
+            TrainRatings.append(contents[1])
         train_count += 1
         continue
     if test_count < test_num:
-        TestDocs.append(contents[1])
-        TestRatings.append(contents[0])
+        if dataset == 'semeval':
+            TestDocs.append(contents[1])
+            TestRatings.append(contents[0])
+        if dataset == 'sina':
+            TestDocs.append(contents[2])
+            TestRatings.append(contents[1])
         test_count += 1
 
 
