@@ -1,7 +1,7 @@
 __author__ = 'lixin77'
 # -*-coding:utf-8-*-
 from LoadData.LoadData import *
-from LoadData.LoadModel import *
+from LoadData import LoadModel
 from Preprocess.Preprocess import *
 from ListUtil.ListUtil import *
 from Sample.Sample import *
@@ -50,7 +50,7 @@ class NBModel:
         if dataset == 'sina':
             self.E = 8
         self.dataset = dataset
-        self.isTrainedModel = isTrainedModel
+        self.isTrainedModel = IsTrainedModel
         self.caseId = caseId
         self.Prob = Initial(self.E, 0.0)
         self.EmotionTopic = InitialMat(self.E, self.K, 0)
@@ -122,11 +122,11 @@ class NBModel:
         """
         self.D = len(TrainingDocs)
         self.importance = Initial(size=self.D, data=0.0)
-        self.IdListSet = _load_id_list(path='%s/doc_ids.txt' % self.dataset)
-        self.Dictionary = _load_vocabulary(path='%s/voca.txt' % self.dataset)
+        self.IdListSet = LoadModel._load_id_list(path='%s/doc_wids.txt' % self.dataset)
+        self.Dictionary = LoadModel._load_vocabulary(path='%s/voca.txt' % self.dataset)
         self.W = len(self.Dictionary)
-        self.DocTopicMat = _load_pz_d(path='%s/k%s.pz_d' % (self.dataset, self.K))
-        self.TopicWordMat = _load_pw_z(path='%s/k%s.pw_z' % (self.dataset, self.K))
+        self.DocTopicMat = LoadModel._load_pz_d(path='%s/k%s.pz_d' % (self.dataset, self.K))
+        self.TopicWordMat = LoadModel._load_pw_z(path='%s/k%s.pw_z' % (self.dataset, self.K))
         self.InitDocEmotion(TrainingRatings)
 
     def initModel(self, TrainingDocs, TrainingRatings, TestingDocs):
