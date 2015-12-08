@@ -199,6 +199,26 @@ class NBModel:
         #print "the importance of the emotion classes are:", self.importance
         #print "the documents contained in the every class is: ", self.EmotionDoc
 
+
+    def ComputeDocumentImportance(self, method, docid, allratings):
+        """
+        compute the importance of document with docid
+        """
+        if method == 'entropy':
+            entropy = 0.0
+            for j in xrange(self.E):
+                if self.DocEmotion[docid][j] == 0:
+                    continue
+                p = float(self.DocEmotion[docid][j]) / float(allratings)
+                log_p = math.log(p, 8)
+                entropy += p * log_p
+            entropy = math.fabs(entropy)
+            importance = 1- entropy
+            return importance
+        if method == 'gini':
+            return 0
+
+
     def Infer(self, TestingDocs, TestRatings):
         print "Begin to do the inference of the new documents..."
         lengthDocs = len(TestingDocs)
@@ -206,11 +226,15 @@ class NBModel:
         assert lengthDocs == lengthRatings
         TestWordListSet = [PreprocessText(text, self.StopWords) for text in TestingDocs]
         TestIdListSet = [Word2Id(wdl, self.Dictionary) for wdl in TestWordListSet]
-        path = os.getcwd() + '/result%s.txt' % self.caseId
+        path = os.getcwd() + '/%s_result%s.txt' % (self.dataset, self.caseId)
         fp = open(path, 'w+')
         lines = []
         true_count = 0
+
         for i in xrange(lengthDocs):
+            if i % 500 == 0:
+                print "processed %s documents" % i
+            #print "do the inference of the %sth docs" % i
             res, log_distribution = self.Predict(WordList=TestIdListSet[i])
             res_label = self.EmotionLabelDict[res]
             line = "Raw ratings is: %s, raw text is: %s\nPredict label is: %s, result:" % (TestRatings[i], TestingDocs[i], res_label)
@@ -242,6 +266,7 @@ class NBModel:
             # use log form
             posterior += math.log(self.ClassProb[eid], 2)
             for wid in WordList:
+                wid = int(wid)
                 pzw = [row[wid] for row in self.TopicWordMat]
                 if not self.isTrainedModel:
                     # self training model needs normalization
